@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Release Notes API
+  version: 0.0.1
+  description: API to retrieve the release notes of legacy products.
+  contact:
+    name: Balaji Jayaraman
+    url: https://www.linkedin.com/in/balajijayaramantechwriter/
+    email: jkbalaji1103@gmail.com
+servers:
+  - url: http://localhost:5000
+    description: Sample project running locally
+externalDocs:
+  description: Know more about the archived legacy products.
+  url: https://github.com/
+paths:
+  /releases:
+    get:
+      operationId: allReleases
+      summary: Lists all available release notes
+      description: Returns a list of all archived release notes.
+      tags:
+        - releasenumber
+      responses:
+        '200':
+          description: Release notes in a list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/release"
+
+  /releases/{releasenumber}:
+    get:
+      operationId: oneReleaseNote
+      summary: Fetches specified release note
+      description: Get the release note based on release number.
+      tags:
+        - releasenumber
+      parameters:
+      - name: releasenumber
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 9.0.2.198
+
+      responses:
+        '200':
+          description: Release note for specified release number.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/releaseinfo"
+        '400':
+          description: Bad Request. Given Release number is not valid.
+        '404':
+          description: Release number not available.
+
+
+components:
+  schemas:
+    release:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product name
+          example: "Product Titan CRM"
+        type:
+          type: number
+          description: Type of product
+          example: legacy
+        total_releases:
+          type: number
+          description: Number of releases per year
+          example: 62
+    releaseinfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Product name
+          example: "Product Titan CRM"
+        type:
+          type: number
+          description: Type of product
+          example: legacy
+        whats_new:
+          type: string
+          description: What's New in this release?
+          example: New feature description 1
+        resolved_issues:
+          type: string
+          description: List of resolved Issues
+          example: Resolved issues description 1
+        known_issues:
+          type: string
+          description: List of known issues
+          example: Known issues description 1
+
+
+tags:
+  - name: releasenumber
+    description: Release number-based API to retrieve release notes.
